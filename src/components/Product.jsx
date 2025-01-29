@@ -11,8 +11,12 @@ const Product = ({ productDetails }) => {
           <img className="w-20 h-20" src={image} alt={title} />
         </center>
         <>
-          <h1 className="mt-4 text-sm hidden lg:block">{title.slice(0, 50) + "..."}</h1>
-          <h1 className="mt-4 text-sm lg:hidden">{title.slice(0, 30) + "..."}</h1>
+          <h1 className="mt-4 text-sm hidden lg:block">
+            {title.slice(0, 50) + "..."}
+          </h1>
+          <h1 className="mt-4 text-sm lg:hidden">
+            {title.slice(0, 30) + "..."}
+          </h1>
           <p className="my-2 font-semibold">From ₹ {price * 30}</p>
           <div className="flex flex-row items-center gap-3">
             <span className="py-1 px-2 rounded-sm bg-green-700 text-xs font-semibold text-white flex flex-row items-center gap-1">

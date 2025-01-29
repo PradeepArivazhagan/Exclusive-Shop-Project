@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../redux/slice/cartSlice";
 import Swal from "sweetalert2";
 import Cookie from "js-cookie";
+import { FaRegHeart } from "react-icons/fa";
+import { addToFavorite } from "../redux/slice/wishlistSlice";
 // {
 //     "id": 1,
 //     "title": "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
@@ -34,6 +36,7 @@ const ProductDetails = () => {
   let [productDetails, setProductDetails] = useState(null);
   let [similarProducts, setSimilarProducts] = useState([]);
   let cartProducts = useSelector((state) => state.cart);
+  let wishlistProducts = useSelector((state) => state.wishlist);
 
   useEffect(() => {
     axios
@@ -88,6 +91,35 @@ const ProductDetails = () => {
     }
   };
 
+  const handleFavorite = (product) => {
+    if (jwtToken !== undefined) {
+      let check = wishlistProducts.find(
+        (wishlistProduct) => wishlistProduct.id === product.id
+      );
+      if (check) {
+        Swal.fire({
+          title: "Item Already Exists in Wishlist!",
+          text: "You already added this product to wishlist!",
+          icon: "warning",
+        });
+        return;
+      } else {
+        dispatch(addToFavorite(product));
+        Swal.fire({
+          title: "Item Added to Wishlist!",
+          text: "More Product Waiting for you Shop Now!",
+          icon: "success",
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please Login to Continue!",
+      });
+    }
+  };
+
   if (productDetails !== null) {
     fetchSimilarProducts();
   }
@@ -105,6 +137,12 @@ const ProductDetails = () => {
               <p className="absolute top-2 left-2 text-sm lg:text-base bg-violet-600 text-white font-semibold py-1 px-2 rounded-md">
                 35% OFF
               </p>
+              <button
+                onClick={() => handleFavorite(productDetails)}
+                className="absolute right-2.5 top-2.5 p-2 bg-slate-200 hover:bg-red-200 cursor-pointer text-white text-2xl rounded-full"
+              >
+                <FaRegHeart />
+              </button>
               <center>
                 <img
                   className="w-[50%] md:w-[70%] lg:w-[50%]"

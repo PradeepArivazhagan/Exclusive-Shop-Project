@@ -7,6 +7,14 @@ import Login from "./pages/Login";
 import Wishlist from "./pages/Wishlist";
 import Cart from "./pages/Cart";
 import Protected from "./components/Protected";
+
+if (!localStorage.getItem("cart")) {
+  localStorage.setItem("cart", JSON.stringify([]));
+}
+if (!localStorage.getItem("wishlist")) {
+  localStorage.setItem("wishlist", JSON.stringify([]));
+}
+
 const App = () => {
   return (
     <BrowserRouter>
