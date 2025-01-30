@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import Home from "./pages/Home";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Category from "./pages/Category";
 import ProductDetails from "./pages/ProductDetails";
 import Login from "./pages/Login";
@@ -33,10 +34,11 @@ const App = () => {
         <Route path="/category/:categoryName" element={<Category />} />
 
         <Route path="/products/:id" element={<ProductDetails />} />
-        
+
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/cart" element={<Cart />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };
