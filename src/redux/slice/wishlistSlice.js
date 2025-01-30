@@ -1,26 +1,41 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-let wishlistStateFromLocalStorage = JSON.parse(
-  localStorage.getItem("wishlist")
-);
+// Helper function to safely parse localStorage data
+const getWishlistStateFromLocalStorage = () => {
+  try {
+    const wishlistState = localStorage.getItem("wishlist");
+    return wishlistState ? JSON.parse(wishlistState) : [];
+  } catch (error) {
+    console.error("Error parsing wishlist state from localStorage:", error);
+    return [];
+  }
+};
 
 const wishlistSlice = createSlice({
   name: "wishlist",
-  initialState: wishlistStateFromLocalStorage,
+  initialState: getWishlistStateFromLocalStorage(), // Initialize with localStorage data
   reducers: {
     addToFavorite: (state, action) => {
-      let itemExists = state.find((item) => item.id === action.payload.id);
+      const itemExists = state.find((item) => item.id === action.payload.id);
       if (!itemExists) {
-        state.push(action.payload);
-        localStorage.setItem("wishlist", JSON.stringify([...state]));
+        const newState = [...state, action.payload]; // Create a new array with the added item
+        try {
+          localStorage.setItem("wishlist", JSON.stringify(newState));
+        } catch (error) {
+          console.error("Error saving wishlist state to localStorage:", error);
+        }
+        return newState;
       }
+      return state; // Return unchanged state if item already exists
     },
     removeFromFavorite: (state, action) => {
-      let newWishListProducts = state.filter(
-        (item) => item.id !== action.payload
-      );
-      localStorage.setItem("wishlist", JSON.stringify(newWishListProducts));
-      return newWishListProducts;
+      const newState = state.filter((item) => item.id !== action.payload); // Filter out the item to remove
+      try {
+        localStorage.setItem("wishlist", JSON.stringify(newState));
+      } catch (error) {
+        console.error("Error saving wishlist state to localStorage:", error);
+      }
+      return newState;
     },
   },
 });
